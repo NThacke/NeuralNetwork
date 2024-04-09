@@ -28,7 +28,6 @@ public class Image extends AbstractImage {
             e.printStackTrace();
         }
         calc_phi(n, a, b);
-        System.out.println(Arrays.toString(phi));
     }
 
     protected boolean validDimensions(int n, int a, int b) {

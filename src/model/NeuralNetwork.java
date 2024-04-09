@@ -1,13 +1,16 @@
 package model;
 
+import java.util.*;
+
 public class NeuralNetwork {
 
     public static int INPUT_DIGITS_SIZE = 196;
     public static final int HIDDEN_DIGITS_SIZE = 32;
     public static final int OUTPUT_DIGITS_SIZE = 10;
 
+    List<Layer> hiddenLayers;
+
     Layer input_layer;
-    Layer hidden_layer;
     Layer output_layer;
 
     int input;
@@ -19,38 +22,46 @@ public class NeuralNetwork {
     /**
      * A three layer neural network.
      * @param input The number of input nodes
-     * @param hidden The number of hidden nodes
+     * @param hiddenNodes A List containing the number of nodes in each hidden layer of this Neural Network.
      * @param output The number of output nodes
      */
-    public NeuralNetwork(int input, int hidden, int output) {
-        input_layer = new Layer(Layer.INPUT_LAYER);
-        hidden_layer = new Layer(Layer.HIDDEN_LAYER);
-        output_layer = new Layer(Layer.OUTPUT_LAYER);
-
-        input_layer.output = hidden_layer;
-        
-        hidden_layer.input = input_layer;
-        hidden_layer.output = output_layer;
-
-        output_layer.input = hidden_layer;
-        
-        hidden_layer.init_connections();
-        output_layer.init_connections();
-
+    public NeuralNetwork(int input, List<Integer> hiddenNodes, int output) {
+        INPUT_DIGITS_SIZE = input;
+        input_layer = new Layer(Layer.INPUT_LAYER, input);
         this.input = input;
-        this.hidden = hidden;
+        hiddenLayers = new ArrayList<>();
+        for(int i = 0; i< hiddenNodes.size(); i++) {
+            Layer layer = new Layer(Layer.HIDDEN_LAYER, hiddenNodes.get(i));
+            layer.id = i+1;
+            hiddenLayers.add(layer);
+            if(i == 0) {
+                input_layer.output = layer;
+                layer.input = input_layer;
+            }
+            else {
+                layer.input = hiddenLayers.get(i-1);
+                hiddenLayers.get(i-1).output = layer;
+            }
+            layer.init_connections();
+        }
+
+        output_layer = new Layer(Layer.OUTPUT_LAYER, output);
+        output_layer.input = hiddenLayers.get(hiddenLayers.size()-1);
+        hiddenLayers.get(hiddenLayers.size()-1).output = output_layer;
+        output_layer.init_connections();
         this.output = output;
     }
 
     public void train(Image image) {
         double[] arr = forward_propagation(image);
         back_propagate(image, arr);
-//        output_layer.backpropagate(arr);
     }
 
     public double[] forward_propagation(Image image) {
         input_layer.setImage(image);
-        hidden_layer.fire();
+        for(Layer layer : hiddenLayers) {
+            layer.fire();
+        }
         output_layer.fire();
         return output_layer.output_vector;
     }
@@ -71,17 +82,23 @@ public class NeuralNetwork {
     }
 
     void save(int n, int a, int b, double d) {
-        hidden_layer.save(n, a, b, d);
+        for(Layer layer : hiddenLayers) {
+            layer.save(n, a, b, d);
+        }
         output_layer.save(n, a, b, d);
     }
 
     public void load(int n, int a, int b, double d) {
+        for(Layer layer : hiddenLayers) {
+            layer.load(n, a, b, d);
+        }
         output_layer.load(n, a, b, d);
-        hidden_layer.load(n, a, b, d);
     }
 
     public void randomizeWeights() {
-        hidden_layer.randomizeWeights();
+        for(Layer layer : hiddenLayers) {
+            layer.randomizeWeights();
+        }
         output_layer.randomizeWeights();
     }
 }

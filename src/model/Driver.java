@@ -24,14 +24,14 @@ public class Driver implements Comparable<Driver> {
 
     private double threshold;
 
-    public Driver(int n, int a, int b, double threshold) {
+    public Driver(int n, int a, int b, double threshold, List<Integer> hidden) {
         NeuralNetwork.INPUT_DIGITS_SIZE = n;
         images = new ArrayList<>();
         this.n = n;
         this.a = a;
         this.b = b;
         this.threshold = threshold;
-        nn = new NeuralNetwork(n, 329, 10);
+        nn = new NeuralNetwork(n, hidden, 10);
 
     }
 
@@ -94,16 +94,14 @@ public class Driver implements Comparable<Driver> {
     }
 
     public void train() {
-        loadImages(Util.DIGIT_TRAINING_DATA);
-        loadLabels(Util.DIGIT_TRAINING_LABELS);
+        // loadImages(Util.DIGIT_TRAINING_DATA);
+        // loadLabels(Util.DIGIT_TRAINING_LABELS);
         trainingSet(threshold);
-        for(Image i : trainingset) {
-            System.out.println(i);
-        }
         long cnt = 0;
         while(cnt < TRAINING_CNT) {
-
-            System.out.println(cnt);
+            if(cnt % 50 == 0) {
+                System.out.println(cnt);
+            }
 
             for (int i = 0; i < trainingset.size(); i++) {
                 Image image = trainingset.get(i);

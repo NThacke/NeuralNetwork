@@ -39,6 +39,7 @@ public abstract class AbstractImage {
         for (int i = 0; i <= image.length - a; i += a) {
             for (int j = 0; j <= image[i].length - b; j += b) {
                 arr[cnt] = Util.sigmoid(count(i, j, a, b));
+                // arr[cnt] = count(i, j, a, b);
                 cnt++;
             }
         }
@@ -68,18 +69,18 @@ public abstract class AbstractImage {
      */
     abstract protected boolean validDimensions(int n, int a, int b);
 
-    private int count(int startRow, int startCol, int a, int b) {
-        int count = 0;
+    private double count(int startRow, int startCol, int a, int b) {
+        double count = 0;
         for (int i = startRow; i < startRow + a; i++) {
             for (int j = startCol; j < startCol + b; j++) {
                 if (image[i][j] == '#') {
                     count += 2;
                 }
                 else if(image[i][j] == '+') {
-                    count += 0;
+                    count += 1;
                 }
                 else {
-                    count = -2;
+                    count -=1;
                 }
             }
         }

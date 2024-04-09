@@ -25,22 +25,27 @@ public class Layer {
 
     private int type;
 
-    public Layer(int type) {
+    int id;
+
+    private int size;
+
+    public Layer(int type, int size) {
         this.type = type;
+        this.size = size;
         switch (type) {
             case INPUT_LAYER : {
-                output_vector = new double[NeuralNetwork.INPUT_DIGITS_SIZE];
+                output_vector = new double[size];
                 z = new double[output_vector.length];
                 break;
             }
             case HIDDEN_LAYER : {
-                output_vector = new double[NeuralNetwork.HIDDEN_DIGITS_SIZE];
+                output_vector = new double[size];
                 z = new double[output_vector.length];
                 bias_weights = new double[output_vector.length];
                 break;
             }
             default : {
-                output_vector = new double[NeuralNetwork.OUTPUT_DIGITS_SIZE];
+                output_vector = new double[size];
                 z = new double[output_vector.length];
                 bias_weights = new double[output_vector.length];
             }
@@ -48,6 +53,7 @@ public class Layer {
     }
 
     public void randomizeWeights() {
+        System.out.println(id);
         double r = Math.sqrt(6.0/ (double)(input.output_vector.length));
         for(int i = 0; i < weights.length; i++) {
             for(int j = 0; j < weights[i].length; j++) {
@@ -253,9 +259,15 @@ public class Layer {
     }
 
     public void save(int n, int a, int b, double d) {
-        String filename = weights_filename() + "n:" + n + "_a:" +a + "_b:" + b + "_d:" + d + "weights.txt";
+        String filename = weights_filename() + "id:" + id + "_n:" + n + "_a:" +a + "_b:" + b + "_d:" + d + "weights.txt";
         try {
-            FileWriter writer = new FileWriter(filename);
+            FileWriter writer = null;
+            if(id == 1) { //1st hidden layer, overwrite
+                writer = new FileWriter(filename, false); //overwrite
+            }
+            else {
+                writer = new FileWriter(filename, true); //append to data
+            }
             for(int i = 0; i <weights.length; i++) {
                 for(int j = 0; j < weights[i].length; j++) {
                     writer.write(String.valueOf(weights[i][j]) + "\n");
@@ -272,7 +284,7 @@ public class Layer {
     }
 
     public void load(int n, int a, int b, double d) {
-        String filename = weights_filename() + "n:" + n + "_a:" +a + "_b:" + b + "_d:" + d + "weights.txt";
+        String filename = weights_filename() + "id:" + id + "_n:" + n + "_a:" +a + "_b:" + b + "_d:" + d + "weights.txt";
         try {
             Scanner scanner = new Scanner(new FileInputStream(filename));
             for(int i = 0; i <weights.length; i++) {

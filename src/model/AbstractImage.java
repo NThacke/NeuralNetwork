@@ -78,7 +78,7 @@ public abstract class AbstractImage {
                 else if(image[i][j] == '+') {
                     count += 0;
                 }
-                else if(a == 1 && b == 1) {
+                else {
                     count = -2;
                 }
             }

@@ -11,11 +11,12 @@ public class Main {
     public static void main(String[] args) {
 
         double best = 0.0;
-        // Driver bestDriver = new Driver(784, 1, 1, 1.0);
+        Driver bestDriver = new Driver(784, 1, 1, 0.4);
         // bestDriver.load();
+        // bestDriver.train();
         // bestDriver.validate();
         List<Driver> list = new ArrayList<>();
-        for(int i = 1; i<digit_dim.length; i++) {
+        for(int i = 0; i<digit_dim.length; i++) {
             int n = digit_dim[i][0];
             int a = digit_dim[i][1];
             int b = a;
@@ -31,7 +32,7 @@ public class Main {
                     d.validate();
                     if(d.acc > best) {
                         best = d.acc;
-                        // bestDriver = d;
+                        bestDriver = d;
                     }
                     list.add(d);
             }
@@ -40,7 +41,7 @@ public class Main {
         for(Driver d : list) {
             System.out.println(d);
         }
-        // System.out.println("Best accuracy is " + best + " from driver " + bestDriver.toString());
+        System.out.println("Best accuracy is " + best + " from driver " + bestDriver.toString());
     }
 
     private static List<Image> loadImages(int n, int a, int b, String filename) {

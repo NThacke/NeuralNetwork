@@ -4,7 +4,7 @@ import model.util.Util;
 
 import java.util.*;
 import java.io.*;
-public class Driver {
+public class Driver implements Comparable<Driver> {
 
     public NeuralNetwork nn;
 
@@ -87,6 +87,7 @@ public class Driver {
             }
 
         }
+        System.out.println(images.size());
         double accuracy = (double)(correct)/(double)(images.size());
         this.acc = accuracy;
         System.out.println("Correct " + correct + " out of " + images.size() + " for an accuracy of " + accuracy);
@@ -175,6 +176,10 @@ public class Driver {
     }
 
     public String toString() {
-        return "N : " + n + " A : " + a + " B : " + b + " Threshold : " + threshold;
+        return "N : " + n + " A : " + a + " B : " + b + " Threshold : " + threshold + " Accuracy : " + acc;
+    }
+
+    public int compareTo(Driver other) {
+        return (int)(100*(this.acc - other.acc));
     }
 }

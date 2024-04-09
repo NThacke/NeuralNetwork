@@ -70,8 +70,11 @@ public abstract class AbstractImage {
         int count = 0;
         for (int i = startRow; i < startRow + a; i++) {
             for (int j = startCol; j < startCol + b; j++) {
-                if (image[i][j] == '#' || image[i][j] == '+') {
+                if (image[i][j] == '#') {
                     count++;
+                }
+                if(image[i][j] == '+') {
+                    count += 2;
                 }
             }
         }

@@ -2,8 +2,8 @@ package model;
 
 public class NeuralNetwork {
 
-    public static final int INPUT_DIGITS_SIZE = 784;
-    public static final int HIDDEN_DIGITS_SIZE = 16;
+    public static final int INPUT_DIGITS_SIZE = 196;
+    public static final int HIDDEN_DIGITS_SIZE = 32;
     public static final int OUTPUT_DIGITS_SIZE = 10;
 
     Layer input_layer;
@@ -45,6 +45,7 @@ public class NeuralNetwork {
     public void train(Image image) {
         double[] arr = forward_propagation(image);
         back_propagate(image, arr);
+//        output_layer.backpropagate(arr);
     }
 
     public double[] forward_propagation(Image image) {
@@ -72,6 +73,11 @@ public class NeuralNetwork {
     void save() {
         hidden_layer.save();
         output_layer.save();
+    }
+
+    public void load() {
+        output_layer.load();
+        hidden_layer.load();
     }
 
     public void randomizeWeights() {

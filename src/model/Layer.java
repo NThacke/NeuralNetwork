@@ -7,7 +7,7 @@ import java.io.FileWriter;
 import java.util.*;
 public class Layer {
 
-    public static final double alpha = 0.01;
+    public static final double alpha = 1.0;
 
     public static final int INPUT_LAYER = 129;
     public static final int HIDDEN_LAYER = 130;
@@ -48,13 +48,14 @@ public class Layer {
     }
 
     public void randomizeWeights() {
+        double r = Math.sqrt(6.0/ (double)(input.output_vector.length));
         for(int i = 0; i < weights.length; i++) {
             for(int j = 0; j < weights[i].length; j++) {
-                weights[i][j] = Util.random.nextDouble()/1000;
+                weights[i][j] = Util.random.nextDouble(-r,r);
             }
         }
         for(int i = 0; i < bias_weights.length; i++) {
-            bias_weights[i] = Util.random.nextDouble()/1000;
+            bias_weights[i] = Util.random.nextDouble(-r,r);
         }
     }
 
@@ -73,7 +74,8 @@ public class Layer {
     }
 
     public void setImage(Image image) {
-        output_vector = Arrays.stream(image.phi()).mapToDouble(i -> i).toArray();
+        output_vector = Util.toDoubleArray(image.phi());
+//        output_vector = Arrays.stream(image.phi()).mapToDouble(i -> i).toArray();
     }
 
     /**
@@ -126,19 +128,20 @@ public class Layer {
             double[] e = new double[this.weights.length]; //the error that neuron i has
             double[][] weights_subsequent = output.weights;
 
+            for (int i = 0; i < this.weights.length; i++) {
+                double error_i = 0.0; //the error for the ith neuron in layer L
+//                double sig = sigmoid_prime(output.z[i]);
+                for (int j = 0; j < error.length; j++) {
+                    error_i += (error[j] * weights_subsequent[j][i]) * sigmoid_prime(output.z[j]);
+                }
+//                e[i] = error_i * sig;
+                e[i] = error_i;
+            }
+
 //            System.out.println("The error terms are");
 //            for(int i = 0; i < e.length; i++) {
 //                System.out.println(e[i]);
 //            }
-
-            for (int i = 0; i < this.weights.length; i++) {
-                double error_i = 0.0; //the error for the ith neuron in layer L
-                double sig = sigmoid_prime(z[i]);
-                for (int j = 0; j < error.length; j++) {
-                    error_i += (error[j] * weights_subsequent[j][i]);
-                }
-                e[i] = error_i * sig;
-            }
 
             //Before updating, we need to propagate backwards.
             input.back_propagate(e);
@@ -153,13 +156,13 @@ public class Layer {
 
             for (int i = 0; i < weights.length; i++) {
                 for (int j = 0; j < weights[i].length; j++) {
-                    weights[i][j] += ((alpha) * (e[i]) * activation[j]);
+                    weights[i][j] -= ((alpha) * (e[i]) * activation[j]);
                 }
             }
 
             //update bias
             for(int i = 0; i < bias_weights.length; i++) {
-                bias_weights[i] += (alpha * e[i]);
+                bias_weights[i] -= (alpha * e[i]);
             }
 
         }
@@ -189,39 +192,40 @@ public class Layer {
         double[] expected = expected(image);
         double[] loss = loss(expected, output);
 
-        System.out.println("The error is :");
-        for(int i = 0; i<loss.length; i++) {
-            System.out.println(loss[i]);
-        }
+//        System.out.println("The error is :");
+//        for(int i = 0; i<loss.length; i++) {
+//            System.out.println(loss[i]);
+//        }
 
         double[] neuron_error = new double[loss.length]; //the error that each neuron contributes at the output layer
         for(int i = 0; i < neuron_error.length; i++) {
-            neuron_error[i] = loss[i] * sigmoid_prime(z[i]);
+            neuron_error[i] = loss[i] * sigmoid_prime(output_vector[i]);
         }
 
-        System.out.println("The error term for each neuron is :");
-        for(int i = 0; i < neuron_error.length; i++) {
-            System.out.println(neuron_error[i]);
-        }
-        System.out.println("Z[i] | sigmoid'[i] : ");
-        for(int i = 0; i<z.length; i++) {
-            System.out.println(z[i] + " | " + sigmoid_prime(z[i]));
-        }
+//        System.out.println("The error term for each neuron is :");
+//        for(int i = 0; i < neuron_error.length; i++) {
+//            System.out.println(neuron_error[i]);
+//        }
+//        System.out.println("Z[i] | sigmoid'[i] : ");
+//        for(int i = 0; i<z.length; i++) {
+//            System.out.println(z[i] + " | " + sigmoid_prime(z[i]));
+//        }
         input.back_propagate(neuron_error);
 
         //weights
         double[] activation = input.output_vector;
         for(int i = 0; i < weights.length; i++) {
             for(int j = 0; j < weights[i].length; j++) {
-                System.out.println("Updating weight by " + (-alpha * neuron_error[i] * activation[j]));
-                weights[i][j] += (alpha * neuron_error[i] * activation[j]);
+//                System.out.println("Updating weight by " + (-alpha * neuron_error[i] * activation[j]));
+                weights[i][j] -= (alpha * neuron_error[i] * activation[j]);
             }
         }
         //biases
         for(int i = 0; i < bias_weights.length; i++) {
-            bias_weights[i] += (alpha)*(neuron_error[i]);
+            bias_weights[i] -= (alpha)*(neuron_error[i]);
         }
     }
+
 
     private double[] expected(Image image) {
         double[] arr =  new double[output_vector.length];
@@ -242,7 +246,7 @@ public class Layer {
             double[] arr = new double[expected.length];
             for(int i = 0; i < output.length; i++) {
                 double diff = output[i] - expected[i];
-                arr[i] = diff * diff;
+                arr[i] = diff;
             }
             return arr;
         }

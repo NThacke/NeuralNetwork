@@ -18,7 +18,7 @@ public class Driver {
     private int a;
     private int b;
 
-    private static final int TRAINING_CNT = 1000;
+    private static final int TRAINING_CNT = 500;
 
     private double threshold;
 
@@ -43,8 +43,31 @@ public class Driver {
             System.out.println(i + " : " + output[i]);
         }
         nn.back_propagate(image, output);
+    }
+    private double[] expected(Image image, double[] output_vector) {
+        double[] arr =  new double[output_vector.length];
+        int ans = image.getLabel();
+        for(int i = 0; i < arr.length; i++) {
+            if(i == ans) {
+                arr[i] = 1.0;
+            }
+            else {
+                arr[i] = 0.0;
+            }
+        }
+        return arr;
+    }
 
-
+    private double[] loss(double[] expected, double[] output) {
+        if(expected.length == output.length) {
+            double[] arr = new double[expected.length];
+            for(int i = 0; i < output.length; i++) {
+                double diff = output[i] - expected[i];
+                arr[i] = diff * diff;
+            }
+            return arr;
+        }
+        throw new IllegalArgumentException("Expected and output do not have the same length Expected : " + expected.length + " Output : " + output.length);
     }
 
     public void validate() {
@@ -54,9 +77,12 @@ public class Driver {
         for(int i = 0; i < images.size(); i++) {
             Image image = images.get(i);
             int answer = nn.fire(image);
+            System.out.println(image);
+            System.out.println(answer);
             if(answer == labels[image.getID()]) {
                 correct++;
             }
+
         }
         double accuracy = (double)(correct)/(double)(images.size());
         System.out.println("Correct " + correct + " out of " + images.size() + " for an accuracy of " + accuracy);
@@ -66,8 +92,10 @@ public class Driver {
         loadImages(Util.DIGIT_TRAINING_DATA);
         loadLabels(Util.DIGIT_TRAINING_LABELS);
         trainingSet(threshold);
+        for(Image i : trainingset) {
+            System.out.println(i);
+        }
         long cnt = 0;
-        nn.randomizeWeights();
         while(cnt < TRAINING_CNT) {
 
             System.out.println(cnt);
@@ -81,6 +109,14 @@ public class Driver {
         nn.save();
     }
 
+    public void randomizeWeights() {
+        nn.randomizeWeights();
+    }
+
+    public void load() {
+        nn.load();
+    }
+
     private void trainingSet(double d) {
         this.trainingset = new ArrayList<>();
         if(d == 1.0) {
@@ -90,7 +126,8 @@ public class Driver {
             }
         }
         else {
-            for(int i = 0; i < d / (10); i++) {
+            int cnt = (int)((d/10.0)*(images.size()));
+            for(int i = 0; i < cnt; i++) {
                 int r = Util.random.nextInt(images.size());
                 trainingset.add(images.remove(r));
             }

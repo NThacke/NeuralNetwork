@@ -7,9 +7,9 @@
     <list default="true" id="c6f08de9-382a-429d-92c1-c74085e10320" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/AbstractImage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/AbstractImage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/weights/digits/hidden/weights.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/data/weights/digits/hidden/weights.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/weights/digits/output/weights.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/data/weights/digits/output/weights.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/model/Driver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Driver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/Image.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Image.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/model/Layer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Layer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/model/NeuralNetwork.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/NeuralNetwork.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/model/util/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/util/Util.java" afterDir="false" />

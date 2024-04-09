@@ -51,7 +51,7 @@ public class Util {
 
 
     public static final long seed = 1;
-    public static final Random random = new Random(seed);
+    public static final Random random = new Random();
 
 
     public static double sigmoid(double x) {
@@ -64,5 +64,13 @@ public class Util {
         sdf.setTimeZone(TimeZone.getTimeZone("GMT")); // Setting timezone to GMT to ensure accurate calculation
         String formattedTime = sdf.format(new Date(milliseconds));
         return formattedTime;
+    }
+
+    public static double[] toDoubleArray(int[] arr) {
+        double[] out = new double[arr.length];
+        for(int i = 0; i< arr.length; i++) {
+            out[i] = (double)(arr[i]);
+        }
+        return out;
     }
 }

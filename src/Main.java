@@ -14,37 +14,37 @@ public class Main {
         List<Driver> list = new ArrayList<>();
         List<Integer> hidden = hidden();
         Driver bestDriver = new Driver(196, 2, 2, 1.0, hidden);
-        bestDriver.load();
+        // bestDriver.load();
         // bestDriver.randomizeWeights();
-        bestDriver.train();
-        bestDriver.validate();
+        // bestDriver.train();
+        // bestDriver.validate();
         
-        // for(int i = 1; i<digit_dim.length; i++) {
-        //     int n = digit_dim[i][0];
-        //     int a = digit_dim[i][1];
-        //     int b = a;
-        //     List<Image> images = loadImages(n, a, b, Util.DIGIT_TRAINING_DATA);
-        //     int[] labels = loadLabels(images, Util.DIGIT_TRAINING_LABELS);
-        //     for(int j = 10; j<=10; j++) {
-        //             Driver d = new Driver(n, a, b, (j/10.0), hidden);
-        //             d.images = images;
-        //             d.labels = labels;
-        //             // d.randomizeWeights();
-        //             d.load();
-        //             d.train();
-        //             d.validate();
-        //             if(d.acc > best) {
-        //                 best = d.acc;
-        //                 bestDriver = d;
-        //             }
-        //             list.add(d);
-        //     }
-        // }
-        // Collections.sort(list);
-        // for(Driver d : list) {
-        //     System.out.println(d);
-        // }
-        // System.out.println("Best accuracy is " + best + " from driver " + bestDriver.toString());
+        for(int i = 0; i<digit_dim.length; i++) {
+            int n = digit_dim[i][0];
+            int a = digit_dim[i][1];
+            int b = a;
+            List<Image> images = loadImages(n, a, b, Util.DIGIT_TRAINING_DATA);
+            int[] labels = loadLabels(images, Util.DIGIT_TRAINING_LABELS);
+            for(int j = 1; j<=10; j++) {
+                    Driver d = new Driver(n, a, b, (j/10.0), hidden);
+                    d.images = images;
+                    d.labels = labels;
+                    // d.randomizeWeights();
+                    d.load();
+                    d.train();
+                    d.validate();
+                    if(d.acc > best) {
+                        best = d.acc;
+                        bestDriver = d;
+                    }
+                    list.add(d);
+            }
+        }
+        Collections.sort(list);
+        for(Driver d : list) {
+            System.out.println(d);
+        }
+        System.out.println("Best accuracy is " + best + " from driver " + bestDriver.toString());
     }
 
     private static List<Integer> hidden() {

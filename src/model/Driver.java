@@ -20,7 +20,7 @@ public class Driver implements Comparable<Driver> {
 
     public double acc;
 
-    private static final int TRAINING_CNT = 1000;
+    private static final int TRAINING_CNT = 100;
 
     private double threshold;
 
@@ -99,7 +99,7 @@ public class Driver implements Comparable<Driver> {
         trainingSet(threshold);
         long cnt = 0;
         while(cnt < TRAINING_CNT) {
-            if(cnt % 50 == 0) {
+            if(cnt % 10 == 0) {
                 System.out.println(cnt);
             }
 

@@ -1,6 +1,9 @@
 package model;
 
 import java.io.*;
+import java.util.Arrays;
+import java.util.*;
+
 import model.util.*;
 
 public class Image extends AbstractImage {
@@ -25,6 +28,7 @@ public class Image extends AbstractImage {
             e.printStackTrace();
         }
         calc_phi(n, a, b);
+        System.out.println(Arrays.toString(phi));
     }
 
     protected boolean validDimensions(int n, int a, int b) {

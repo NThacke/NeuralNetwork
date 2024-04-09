@@ -14,6 +14,8 @@ public abstract class AbstractImage {
 
     protected int b;
 
+    protected int label;
+
     public int[] phi() {
         return phi;
     }
@@ -82,7 +84,12 @@ public abstract class AbstractImage {
     public int getID() {
         return id;
     }
-
+    public void setLabel(int label) {
+        this.label = label;
+    }
+    public int getLabel() {
+        return label;
+    }
     public String toString() {
         StringBuilder s = new StringBuilder();
         for(int i = 0; i < image.length; i++) {

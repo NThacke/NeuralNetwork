@@ -1,11 +1,9 @@
 package model;
 
-import java.util.*;
-
 public class NeuralNetwork {
 
     public static final int INPUT_DIGITS_SIZE = 784;
-    public static final int HIDDEN_DIGITS_SIZE = 329;
+    public static final int HIDDEN_DIGITS_SIZE = 16;
     public static final int OUTPUT_DIGITS_SIZE = 10;
 
     Layer input_layer;
@@ -44,10 +42,40 @@ public class NeuralNetwork {
         this.output = output;
     }
 
-    public double[] forward_propogation(Image image) {
+    public void train(Image image) {
+        double[] arr = forward_propagation(image);
+        back_propagate(image, arr);
+    }
+
+    public double[] forward_propagation(Image image) {
         input_layer.setImage(image);
         hidden_layer.fire();
         output_layer.fire();
         return output_layer.output_vector;
+    }
+
+    public int fire(Image image) {
+        double[] arr = forward_propagation(image);
+        int max = 0;
+        for(int i = 0; i< arr.length; i++) {
+            if(arr[i] > arr[max]) {
+                max = i;
+            }
+        }
+        return max;
+    }
+
+    public void back_propagate(Image image, double[] output) {
+        output_layer.back_propagate(image, output);
+    }
+
+    void save() {
+        hidden_layer.save();
+        output_layer.save();
+    }
+
+    public void randomizeWeights() {
+        hidden_layer.randomizeWeights();
+        output_layer.randomizeWeights();
     }
 }

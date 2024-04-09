@@ -10,6 +10,8 @@ public class Util {
 
     public static final int DIGIT_IMAGE_WIDTH = 28;
 
+    public static final String DIGITS_HIDDEN_LAYER_WEIGHTS_DIR = "src/data/weights/digits/hidden/";
+    public static final String DIGITS_OUTPUT_LAYER_WEIGHTS_DIR = "src/data/weights/digits/output/";
 
     public static final String DIGIT_0_DIRECTORY = "src/data/weights/digits/0/";
     public static final String DIGIT_1_DIRECTORY = "src/data/weights/digits/1/";

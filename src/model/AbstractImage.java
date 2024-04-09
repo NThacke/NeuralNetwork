@@ -1,10 +1,12 @@
 package model;
 
+import model.util.Util;
+
 public abstract class AbstractImage {
 
     protected char[][] image;
 
-    protected int[] phi;
+    protected double[] phi;
 
     protected int id;
 
@@ -16,7 +18,7 @@ public abstract class AbstractImage {
 
     protected int label;
 
-    public int[] phi() {
+    public double[] phi() {
         return phi;
     }
 
@@ -26,8 +28,8 @@ public abstract class AbstractImage {
         }
     }
 
-    private int[] phi(int n, int a, int b) {
-        int[] arr = new int[n];
+    private double[] phi(int n, int a, int b) {
+        double[] arr = new double[n];
 
         //We need to split the image into *n* regions, each of dimension a*b
 
@@ -36,7 +38,7 @@ public abstract class AbstractImage {
         int cnt = 0;
         for (int i = 0; i <= image.length - a; i += a) {
             for (int j = 0; j <= image[i].length - b; j += b) {
-                arr[cnt] = count(i, j, a, b);
+                arr[cnt] = Util.sigmoid(count(i, j, a, b));
                 cnt++;
             }
         }
@@ -71,10 +73,13 @@ public abstract class AbstractImage {
         for (int i = startRow; i < startRow + a; i++) {
             for (int j = startCol; j < startCol + b; j++) {
                 if (image[i][j] == '#') {
-                    count++;
+                    count += 1;
                 }
-                if(image[i][j] == '+') {
-                    count += 2;
+                else if(image[i][j] == '+') {
+                    count += 1;
+                }
+                else if(a == 1 && b == 1) {
+                    count = -2;
                 }
             }
         }

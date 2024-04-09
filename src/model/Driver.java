@@ -8,11 +8,11 @@ public class Driver implements Comparable<Driver> {
 
     public NeuralNetwork nn;
 
-    List<Image> images;
+    public List<Image> images;
 
     List<Image> trainingset;
 
-    private int[] labels;
+    public int[] labels;
 
     private int n;
     private int a;
@@ -74,8 +74,8 @@ public class Driver implements Comparable<Driver> {
     }
 
     public void validate() {
-        loadImages(Util.DIGIT_VALIDATION_DATA);
-        loadLabels(Util.DIGIT_VALIDATION_LABELS);
+        // loadImages(Util.DIGIT_VALIDATION_DATA);
+        // loadLabels(Util.DIGIT_VALIDATION_LABELS);
         int correct = 0;
         for(int i = 0; i < images.size(); i++) {
             Image image = images.get(i);
@@ -94,8 +94,8 @@ public class Driver implements Comparable<Driver> {
     }
 
     public void train() {
-        loadImages(Util.DIGIT_TRAINING_DATA);
-        loadLabels(Util.DIGIT_TRAINING_LABELS);
+        // loadImages(Util.DIGIT_TRAINING_DATA);
+        // loadLabels(Util.DIGIT_TRAINING_LABELS);
         trainingSet(threshold);
         for(Image i : trainingset) {
             System.out.println(i);

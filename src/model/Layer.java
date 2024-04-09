@@ -73,7 +73,7 @@ public class Layer {
     }
 
     public void setImage(Image image) {
-        output_vector = Util.toDoubleArray(image.phi());
+        output_vector = image.phi();
 //        output_vector = Arrays.stream(image.phi()).mapToDouble(i -> i).toArray();
     }
 
@@ -129,12 +129,12 @@ public class Layer {
 
             for (int i = 0; i < this.weights.length; i++) {
                 double error_i = 0.0; //the error for the ith neuron in layer L
-//                double sig = sigmoid_prime(output.z[i]);
+               double sig = sigmoid_prime(z[i]);
                 for (int j = 0; j < error.length; j++) {
-                    error_i += (error[j] * weights_subsequent[j][i]) * sigmoid_prime(output.z[j]);
+                    error_i += (error[j] * weights_subsequent[j][i]);
                 }
 //                e[i] = error_i * sig;
-                e[i] = error_i;
+                e[i] = (error_i * sig);
             }
 
 //            System.out.println("The error terms are");
@@ -198,7 +198,7 @@ public class Layer {
 
         double[] neuron_error = new double[loss.length]; //the error that each neuron contributes at the output layer
         for(int i = 0; i < neuron_error.length; i++) {
-            neuron_error[i] = loss[i] * sigmoid_prime(output_vector[i]);
+            neuron_error[i] = loss[i] * sigmoid_prime(z[i]);
         }
 
 //        System.out.println("The error term for each neuron is :");

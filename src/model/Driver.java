@@ -18,11 +18,14 @@ public class Driver {
     private int a;
     private int b;
 
+    public double acc;
+
     private static final int TRAINING_CNT = 500;
 
     private double threshold;
 
     public Driver(int n, int a, int b, double threshold) {
+        NeuralNetwork.INPUT_DIGITS_SIZE = n;
         images = new ArrayList<>();
         this.n = n;
         this.a = a;
@@ -85,6 +88,7 @@ public class Driver {
 
         }
         double accuracy = (double)(correct)/(double)(images.size());
+        this.acc = accuracy;
         System.out.println("Correct " + correct + " out of " + images.size() + " for an accuracy of " + accuracy);
     }
 
@@ -106,7 +110,7 @@ public class Driver {
             }
             cnt++;
         }
-        nn.save();
+        nn.save(n, a, b, threshold);
     }
 
     public void randomizeWeights() {
@@ -114,7 +118,7 @@ public class Driver {
     }
 
     public void load() {
-        nn.load();
+        nn.load(n, a, b, threshold);
     }
 
     private void trainingSet(double d) {
@@ -126,7 +130,8 @@ public class Driver {
             }
         }
         else {
-            int cnt = (int)((d/10.0)*(images.size()));
+            int cnt = (int)((d)*(images.size()));
+            System.out.println(cnt);
             for(int i = 0; i < cnt; i++) {
                 int r = Util.random.nextInt(images.size());
                 trainingset.add(images.remove(r));
@@ -136,6 +141,7 @@ public class Driver {
 
     private void loadImages(String filename) {
         try {
+            images = new ArrayList<>();
             RandomAccessFile file = new RandomAccessFile(filename, "r");
             int id = 0;
             while(file.getFilePointer() < file.length()) {
@@ -166,5 +172,9 @@ public class Driver {
         catch(Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public String toString() {
+        return "N : " + n + " A : " + a + " B : " + b + " Threshold : " + threshold;
     }
 }

@@ -2,7 +2,7 @@ package model;
 
 public class NeuralNetwork {
 
-    public static final int INPUT_DIGITS_SIZE = 196;
+    public static int INPUT_DIGITS_SIZE = 196;
     public static final int HIDDEN_DIGITS_SIZE = 32;
     public static final int OUTPUT_DIGITS_SIZE = 10;
 
@@ -70,14 +70,14 @@ public class NeuralNetwork {
         output_layer.back_propagate(image, output);
     }
 
-    void save() {
-        hidden_layer.save();
-        output_layer.save();
+    void save(int n, int a, int b, double d) {
+        hidden_layer.save(n, a, b, d);
+        output_layer.save(n, a, b, d);
     }
 
-    public void load() {
-        output_layer.load();
-        hidden_layer.load();
+    public void load(int n, int a, int b, double d) {
+        output_layer.load(n, a, b, d);
+        hidden_layer.load(n, a, b, d);
     }
 
     public void randomizeWeights() {

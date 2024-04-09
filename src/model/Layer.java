@@ -51,11 +51,11 @@ public class Layer {
         double r = Math.sqrt(6.0/ (double)(input.output_vector.length));
         for(int i = 0; i < weights.length; i++) {
             for(int j = 0; j < weights[i].length; j++) {
-                weights[i][j] = Util.random.nextDouble(-r,r);
+                weights[i][j] = Util.random.nextGaussian();
             }
         }
         for(int i = 0; i < bias_weights.length; i++) {
-            bias_weights[i] = Util.random.nextDouble(-r,r);
+            bias_weights[i] = Util.random.nextGaussian();
         }
     }
 
@@ -70,7 +70,6 @@ public class Layer {
                 break;
             }
         }
-        load();
     }
 
     public void setImage(Image image) {
@@ -253,8 +252,8 @@ public class Layer {
         throw new IllegalArgumentException("Expected and output do not have the same length Expected : " + expected.length + " Output : " + output.length);
     }
 
-    public void save() {
-        String filename = weights_filename() + "weights.txt";
+    public void save(int n, int a, int b, double d) {
+        String filename = weights_filename() + "n:" + n + "_a:" +a + "_b:" + b + "_d:" + d + "weights.txt";
         try {
             FileWriter writer = new FileWriter(filename);
             for(int i = 0; i <weights.length; i++) {
@@ -272,8 +271,8 @@ public class Layer {
         }
     }
 
-    public void load() {
-        String filename = weights_filename() + "weights.txt";
+    public void load(int n, int a, int b, double d) {
+        String filename = weights_filename() + "n:" + n + "_a:" +a + "_b:" + b + "_d:" + d + "weights.txt";
         try {
             Scanner scanner = new Scanner(new FileInputStream(filename));
             for(int i = 0; i <weights.length; i++) {

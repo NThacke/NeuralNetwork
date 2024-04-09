@@ -15,7 +15,7 @@ public class Main {
         List<Integer> hidden = hidden();
         Driver bestDriver = new Driver(196, 2, 2, 1.0, hidden);
         bestDriver.load();
-        bestDriver.randomizeWeights();
+        // bestDriver.randomizeWeights();
         bestDriver.train();
         bestDriver.validate();
         

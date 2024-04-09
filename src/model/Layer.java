@@ -7,7 +7,7 @@ import java.io.FileWriter;
 import java.util.*;
 public class Layer {
 
-    public static final double alpha = 1.0;
+    public static final double alpha = 0.01;
 
     public static final int INPUT_LAYER = 129;
     public static final int HIDDEN_LAYER = 130;
@@ -260,6 +260,7 @@ public class Layer {
 
     public void save(int n, int a, int b, double d) {
         String filename = weights_filename() + "id:" + id + "_n:" + n + "_a:" +a + "_b:" + b + "_d:" + d + "weights.txt";
+        System.out.println("Saving to " + filename);
         try {
             FileWriter writer = null;
             if(id == 1) { //1st hidden layer, overwrite
@@ -285,6 +286,7 @@ public class Layer {
 
     public void load(int n, int a, int b, double d) {
         String filename = weights_filename() + "id:" + id + "_n:" + n + "_a:" +a + "_b:" + b + "_d:" + d + "weights.txt";
+        System.out.println("Loading from " + filename);
         try {
             Scanner scanner = new Scanner(new FileInputStream(filename));
             for(int i = 0; i <weights.length; i++) {

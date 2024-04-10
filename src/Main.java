@@ -8,30 +8,33 @@ import model.util.Util;
 public class Main {
 
     private static final int[][] digit_dim = {{49, 4, 4,}, {196, 2, 2,}, {784, 1, 1}};
+
+    private static final int[][] face_dim = {{42, 10, 10}, {168, 5, 5}};
     public static void main(String[] args) {
 
+        digitTraining();
+    }
+
+    private static void digitTraining() {
         double best = 0.0;
         List<Driver> list = new ArrayList<>();
-        List<Integer> hidden = hidden();
-        Driver bestDriver = new Driver(196, 2, 2, 1.0, hidden);
-        // bestDriver.load();
-        // // bestDriver.randomizeWeights();
-        // bestDriver.train();
-        // bestDriver.validate();
+        List<Integer> hidden = hidden(5000);
+        Driver bestDriver = null;
         
-        for(int i = 1; i<digit_dim.length-1; i++) {
+        for(int i = 0; i<digit_dim.length; i++) {
             int n = digit_dim[i][0];
             int a = digit_dim[i][1];
             int b = a;
-            List<Image> images = loadImages(n, a, b, Util.DIGIT_TRAINING_DATA);
+            List<Image> images = loadImages(n, a, b, Util.DIGIT_TRAINING_DATA, Image.DIGITS);
             int[] labels = loadLabels(images, Util.DIGIT_TRAINING_LABELS);
             for(int j = 10; j<=10; j++) {
-                    Driver d = new Driver(n, a, b, (j/10.0), hidden);
+                    Driver d = new Driver(n, a, b, (j/10.0), hidden, Util.DIGITS);
                     d.labels = labels;
                     d.images = Util.copy(images);
                     // d.randomizeWeights();
                     d.train();
                     d.validate();
+                    // d.test();
                     if(d.acc > best) {
                         best = d.acc;
                         bestDriver = d;
@@ -46,19 +49,55 @@ public class Main {
         System.out.println("Best accuracy is " + best + " from driver " + bestDriver.toString());
     }
 
-    private static List<Integer> hidden() {
+    private static void faceTraining() {
+        double best = 0.0;
+        List<Driver> list = new ArrayList<>();
+        List<Integer> hidden = hidden(451);
+        Driver bestDriver = null;
+        
+        for(int i = 0; i<face_dim.length; i++) {
+            int n = face_dim[i][0];
+            int a = face_dim[i][1];
+            int b = a;
+            List<Image> images = loadImages(n, a, b, Util.FACE_TRAINING_DATA, Image.FACES);
+            int[] labels = loadLabels(images, Util.FACE_TRAINING_LABELS);
+            for(int j = 1; j<=10; j++) {
+                    Driver d = new Driver(n, a, b, (j/10.0), hidden, Util.FACES);
+                    d.labels = labels;
+                    d.images = Util.copy(images);
+                    d.randomizeWeights();
+                    d.train();
+                    d.validate();
+                    // d.test();
+                    if(d.acc > best) {
+                        best = d.acc;
+                        bestDriver = d;
+                    }
+                    list.add(d);
+            }
+        }
+        Collections.sort(list);
+        for(Driver d : list) {
+            System.out.println(d);
+        }
+        System.out.println("Best accuracy is " + best + " from driver " + bestDriver.toString());
+    }
+
+    private static List<Integer> hidden(int sample_size) {
+        double h = sample_size / (2 * (NeuralNetwork.INPUT_DIGITS_SIZE + NeuralNetwork.OUTPUT_DIGITS_SIZE)); //recommend hidden neuron size
+
         List<Integer> list = new ArrayList<>();
-        list.add(64);
+        list.add((int)(h));
         return list;
     }
 
-    private static List<Image> loadImages(int n, int a, int b, String filename) {
+    private static List<Image> loadImages(int n, int a, int b, String filename, int type) {
         try {
             List<Image> images = new ArrayList<>();
             RandomAccessFile file = new RandomAccessFile(filename, "r");
             int id = 0;
             while(file.getFilePointer() < file.length()) {
-                Image image = new Image(n, a, b, file);
+                Image image = new Image(n, a, b, file, type);
                 image.setID(id);
                 images.add(image);
                 id++;

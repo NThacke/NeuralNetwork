@@ -2,7 +2,7 @@ package model;
 
 import model.util.Util;
 
-public abstract class AbstractImage {
+public abstract class AbstractImage implements Util {
 
     protected char[][] image;
 
@@ -17,6 +17,8 @@ public abstract class AbstractImage {
     protected int b;
 
     protected int label;
+
+    protected int type;
 
     public double[] phi() {
         return phi;
@@ -38,8 +40,12 @@ public abstract class AbstractImage {
         int cnt = 0;
         for (int i = 0; i <= image.length - a; i += a) {
             for (int j = 0; j <= image[i].length - b; j += b) {
-                arr[cnt] = Util.sigmoid(count(i, j, a, b));
-                // arr[cnt] = count(i, j, a, b);
+                if(type == DIGITS) {
+                    arr[cnt] = Util.sigmoid(count(i, j, a, b));
+                }
+                else {
+                    arr[cnt] = count(i, j, a, b);
+                }
                 cnt++;
             }
         }
@@ -73,14 +79,19 @@ public abstract class AbstractImage {
         double count = 0;
         for (int i = startRow; i < startRow + a; i++) {
             for (int j = startCol; j < startCol + b; j++) {
-                if (image[i][j] == '#') {
-                    count += 2;
+                if(type == DIGITS) {
+                    if (image[i][j] == '#') {
+                        count += 2;
+                    }
+                    else if(image[i][j] == '+') {
+                        count += 1;
+                    }
+                    else {
+                        count -= 1;
+                    }
                 }
-                else if(image[i][j] == '+') {
-                    count += 1;
-                }
-                else {
-                    count -=1;
+                else if(image[i][j] == '#') {
+                    count ++;
                 }
             }
         }

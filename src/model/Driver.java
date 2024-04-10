@@ -4,7 +4,7 @@ import model.util.Util;
 
 import java.util.*;
 import java.io.*;
-public class Driver implements Comparable<Driver> {
+public class Driver implements Comparable<Driver>, Util {
 
     public NeuralNetwork nn;
 
@@ -20,12 +20,29 @@ public class Driver implements Comparable<Driver> {
 
     public double acc;
 
-    private static final int TRAINING_CNT = 100;
+    private static final int TRAINING_CNT = 1000;
 
     private double threshold;
 
-    public Driver(int n, int a, int b, double threshold, List<Integer> hidden) {
+    private int type;
+
+    public static final String NN_DIGITS_DIR = "src/data/neural_nets/digits/";
+
+    public static final String NN_FACES_DIR = "src/data/neural_nets/faces/";
+
+    public Driver(int n, int a, int b, double threshold, List<Integer> hidden, int type) {
+        this.type = type;
         NeuralNetwork.INPUT_DIGITS_SIZE = n;
+        switch(type) {
+            case DIGITS : {
+                NeuralNetwork.OUTPUT_DIGITS_SIZE = 10;
+                break;
+            }
+            default : {
+                NeuralNetwork.OUTPUT_DIGITS_SIZE = 2;
+                break;
+            }
+        }
         images = new ArrayList<>();
         this.n = n;
         this.a = a;
@@ -35,17 +52,39 @@ public class Driver implements Comparable<Driver> {
     }
 
     private void load_Neural_Net(List<Integer> hidden) {
-        NeuralNetwork nn = loadNN("src/data/neural_nets/n:" + n + "_a:" + a + "_b:" + b + "_d:" + threshold);
+        String dir = "";
+        switch(type) {
+            case FACES : {
+                dir = NN_FACES_DIR;
+                break;
+            }
+            default : {
+                dir = NN_DIGITS_DIR;
+                break;
+            }
+        }
+        NeuralNetwork nn = loadNN(dir + "n:" + n + "_a:" + a + "_b:" + b + "_d:" + threshold);
         if(nn != null) {
             this.nn = nn;
         }
         else {
-            this.nn = new NeuralNetwork(n, hidden, 10);
+            this.nn = new NeuralNetwork(NeuralNetwork.INPUT_DIGITS_SIZE, hidden, NeuralNetwork.OUTPUT_DIGITS_SIZE);
         }
     }
 
      // Method to save a Person object to a file
-     private void saveNN(NeuralNetwork nn, String filename) {
+     private void saveNN(NeuralNetwork nn) {
+        String dir = "";
+        switch(type) {
+            case FACES : {
+                dir = NN_FACES_DIR;
+                break;
+            }
+            default : {
+                dir = NN_DIGITS_DIR;
+            }
+        }
+        String filename = dir + "n:" + n + "_a:" + a + "_b:" + b + "_d:" + threshold;
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
             oos.writeObject(nn);
             System.out.println("NN object saved successfully.");
@@ -65,8 +104,18 @@ public class Driver implements Comparable<Driver> {
     }
 
     public void testing() {
-        loadImages(Util.DIGIT_VALIDATION_DATA);
-        loadLabels(Util.DIGIT_VALIDATION_LABELS);
+        switch (type) {
+            case DIGITS : {
+                loadImages(Util.DIGIT_VALIDATION_DATA);
+                loadLabels(Util.DIGIT_VALIDATION_LABELS);
+                break;
+            }
+            default : {
+                loadImages(Util.FACE_VALIDATION_DATA);
+                loadLabels(Util.FACE_VALIDATION_LABELS);
+                break;
+            }
+        }
         Image image = images.get(0);
         System.out.println(image.toString());
         double[] output = nn.forward_propagation(image);
@@ -103,8 +152,18 @@ public class Driver implements Comparable<Driver> {
     }
 
     public void validate() {
-        loadImages(Util.DIGIT_VALIDATION_DATA);
-        loadLabels(Util.DIGIT_VALIDATION_LABELS);
+        switch (type) {
+            case DIGITS : {
+                loadImages(Util.DIGIT_VALIDATION_DATA);
+                loadLabels(Util.DIGIT_VALIDATION_LABELS);
+                break;
+            }
+            default : {
+                loadImages(Util.FACE_VALIDATION_DATA);
+                loadLabels(Util.FACE_VALIDATION_LABELS);
+                break;
+            }
+        }
         int correct = 0;
         for(int i = 0; i < images.size(); i++) {
             Image image = images.get(i);
@@ -123,8 +182,18 @@ public class Driver implements Comparable<Driver> {
     }
 
     public void train() {
-        // loadImages(Util.DIGIT_TRAINING_DATA);
-        // loadLabels(Util.DIGIT_TRAINING_LABELS);
+        // switch (type) {
+        //     case DIGITS : {
+        //         loadImages(Util.DIGIT_TRAINING_DATA);
+        //         loadLabels(Util.DIGIT_TRAINING_LABELS);
+        //         break;
+        //     }
+        //     default : {
+        //         loadImages(Util.FACE_TRAINING_DATA);
+        //         loadLabels(Util.FACE_TRAINING_LABELS);
+        //         break;
+        //     }
+        // }
         trainingSet(threshold);
         long cnt = 0;
         while(cnt < TRAINING_CNT) {
@@ -138,7 +207,36 @@ public class Driver implements Comparable<Driver> {
             }
             cnt++;
         }
-        saveNN(this.nn, "src/data/neural_nets/n:" + n + "_a:" + a + "_b:" + b + "_d:" + threshold);
+        saveNN(this.nn);
+    }
+    public void test() {
+        switch (type) {
+            case DIGITS : {
+                loadImages(Util.DIGIT_TEST_DATA);
+                loadLabels(Util.DIGIT_TEST_LABELS);
+                break;
+            }
+            default : {
+                loadImages(Util.FACE_TEST_DATA);
+                loadLabels(Util.FACE_TEST_LABELS);
+                break;
+            }
+        }
+        int correct = 0;
+        for(int i = 0; i < images.size(); i++) {
+            Image image = images.get(i);
+            int answer = nn.fire(image);
+            System.out.println(image);
+            System.out.println(answer);
+            if(answer == labels[image.getID()]) {
+                correct++;
+            }
+
+        }
+        System.out.println(images.size());
+        double accuracy = (double)(correct)/(double)(images.size());
+        this.acc = accuracy;
+        System.out.println("Correct " + correct + " out of " + images.size() + " for an accuracy of " + accuracy);
     }
 
     public void randomizeWeights() {
@@ -169,7 +267,7 @@ public class Driver implements Comparable<Driver> {
             RandomAccessFile file = new RandomAccessFile(filename, "r");
             int id = 0;
             while(file.getFilePointer() < file.length()) {
-                Image image = new Image(n, a, b, file);
+                Image image = new Image(n, a, b, file, type);
                 image.setID(id);
                 this.images.add(image);
                 id++;

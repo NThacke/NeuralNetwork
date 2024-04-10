@@ -5,10 +5,15 @@ import java.text.SimpleDateFormat;
 import model.*;
 
 
-public class Util {
+public abstract interface Util {
+
+    public static final int FACES = 19283;
+    public static final int DIGITS = 12920202;
+
+    public static final int FACE_IMAGE_LENGTH = 70;
+    public static final int FACE_IMAGE_WIDTH = 60;
 
     public static final int DIGIT_IMAGE_LENGTH = 28;
-
     public static final int DIGIT_IMAGE_WIDTH = 28;
 
     public static final String DIGITS_HIDDEN_LAYER_WEIGHTS_DIR = "src/data/weights/digits/hidden/";

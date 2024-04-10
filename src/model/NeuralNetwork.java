@@ -6,8 +6,7 @@ import java.util.*;
 public class NeuralNetwork implements Serializable {
 
     public static int INPUT_DIGITS_SIZE = 196;
-    public static final int HIDDEN_DIGITS_SIZE = 32;
-    public static final int OUTPUT_DIGITS_SIZE = 10;
+    public static int OUTPUT_DIGITS_SIZE = 10;
 
     private static final long serialVersionUID = 6529685098267757690L;
 
@@ -32,6 +31,7 @@ public class NeuralNetwork implements Serializable {
         INPUT_DIGITS_SIZE = input;
         input_layer = new Layer(Layer.INPUT_LAYER, input);
         this.input = input;
+        this.output = output;
         hiddenLayers = new ArrayList<>();
         for(int i = 0; i< hiddenNodes.size(); i++) {
             Layer layer = new Layer(Layer.HIDDEN_LAYER, hiddenNodes.get(i));
@@ -52,7 +52,6 @@ public class NeuralNetwork implements Serializable {
         output_layer.input = hiddenLayers.get(hiddenLayers.size()-1);
         hiddenLayers.get(hiddenLayers.size()-1).output = output_layer;
         output_layer.init_connections();
-        this.output = output;
     }
 
     public void train(Image image) {

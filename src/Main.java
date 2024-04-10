@@ -19,7 +19,7 @@ public class Main {
         // bestDriver.train();
         // bestDriver.validate();
         
-        for(int i = 0; i<digit_dim.length-1; i++) {
+        for(int i = 1; i<digit_dim.length-1; i++) {
             int n = digit_dim[i][0];
             int a = digit_dim[i][1];
             int b = a;

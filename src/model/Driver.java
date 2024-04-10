@@ -31,8 +31,37 @@ public class Driver implements Comparable<Driver> {
         this.a = a;
         this.b = b;
         this.threshold = threshold;
-        nn = new NeuralNetwork(n, hidden, 10);
+        load_Neural_Net(hidden);
+    }
 
+    private void load_Neural_Net(List<Integer> hidden) {
+        NeuralNetwork nn = loadNN("src/data/neural_nets/n:" + n + "_a:" + a + "_b:" + b + "_d:" + threshold);
+        if(nn != null) {
+            this.nn = nn;
+        }
+        else {
+            this.nn = new NeuralNetwork(n, hidden, 10);
+        }
+    }
+
+     // Method to save a Person object to a file
+     private void saveNN(NeuralNetwork nn, String filename) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
+            oos.writeObject(nn);
+            System.out.println("NN object saved successfully.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Method to load a Person object from a file
+    private NeuralNetwork loadNN(String filename) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
+            return (NeuralNetwork) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public void testing() {
@@ -109,15 +138,11 @@ public class Driver implements Comparable<Driver> {
             }
             cnt++;
         }
-        nn.save(n, a, b, threshold);
+        saveNN(this.nn, "src/data/neural_nets/n:" + n + "_a:" + a + "_b:" + b + "_d:" + threshold);
     }
 
     public void randomizeWeights() {
         nn.randomizeWeights();
-    }
-
-    public void load() {
-        nn.load(n, a, b, threshold);
     }
 
     private void trainingSet(double d) {
@@ -140,13 +165,13 @@ public class Driver implements Comparable<Driver> {
 
     private void loadImages(String filename) {
         try {
-            images = new ArrayList<>();
+            this.images = new ArrayList<>();
             RandomAccessFile file = new RandomAccessFile(filename, "r");
             int id = 0;
             while(file.getFilePointer() < file.length()) {
                 Image image = new Image(n, a, b, file);
                 image.setID(id);
-                images.add(image);
+                this.images.add(image);
                 id++;
             }
             file.close();
@@ -158,12 +183,12 @@ public class Driver implements Comparable<Driver> {
 
     private void loadLabels(String filename) {
         try {
-            labels = new int[images.size()];
+            this.labels = new int[images.size()];
             Scanner scanner = new Scanner(new File(filename));
             int i = 0;
             while(scanner.hasNext()) {
-                labels[i] = scanner.nextInt();
-                images.get(i).setLabel(labels[i]);
+                this.labels[i] = scanner.nextInt();
+                images.get(i).setLabel(this.labels[i]);
                 i++;
             }
             scanner.close();

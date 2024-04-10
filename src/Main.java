@@ -19,7 +19,7 @@ public class Main {
         // bestDriver.train();
         // bestDriver.validate();
         
-        for(int i = 0; i<digit_dim.length; i++) {
+        for(int i = 0; i<digit_dim.length-1; i++) {
             int n = digit_dim[i][0];
             int a = digit_dim[i][1];
             int b = a;
@@ -30,7 +30,6 @@ public class Main {
                     d.labels = labels;
                     d.images = Util.copy(images);
                     // d.randomizeWeights();
-                    d.load();
                     d.train();
                     d.validate();
                     if(d.acc > best) {

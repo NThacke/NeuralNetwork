@@ -1,12 +1,15 @@
 package model;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class NeuralNetwork {
+public class NeuralNetwork implements Serializable {
 
     public static int INPUT_DIGITS_SIZE = 196;
     public static final int HIDDEN_DIGITS_SIZE = 32;
     public static final int OUTPUT_DIGITS_SIZE = 10;
+
+    private static final long serialVersionUID = 6529685098267757690L;
 
     List<Layer> hiddenLayers;
 
@@ -79,20 +82,6 @@ public class NeuralNetwork {
 
     public void back_propagate(Image image, double[] output) {
         output_layer.back_propagate(image, output);
-    }
-
-    void save(int n, int a, int b, double d) {
-        for(Layer layer : hiddenLayers) {
-            layer.save(n, a, b, d);
-        }
-        output_layer.save(n, a, b, d);
-    }
-
-    public void load(int n, int a, int b, double d) {
-        for(Layer layer : hiddenLayers) {
-            layer.load(n, a, b, d);
-        }
-        output_layer.load(n, a, b, d);
     }
 
     public void randomizeWeights() {

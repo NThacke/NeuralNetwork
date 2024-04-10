@@ -2,16 +2,17 @@ package model;
 
 import model.util.Util;
 
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.util.*;
-public class Layer {
+import java.io.Serializable;
+
+public class Layer implements Serializable {
 
     public static final double alpha = 0.01;
 
     public static final int INPUT_LAYER = 129;
     public static final int HIDDEN_LAYER = 130;
     public static final int OUTPUT_LAYER = 131;
+
+    private static final long serialVersionUID = 623923109829327690L;
 
     Layer input;
     Layer output;
@@ -257,68 +258,4 @@ public class Layer {
         }
         throw new IllegalArgumentException("Expected and output do not have the same length Expected : " + expected.length + " Output : " + output.length);
     }
-
-    public void save(int n, int a, int b, double d) {
-        String filename = weights_filename() + "id:" + id + "_n:" + n + "_a:" +a + "_b:" + b + "_d:" + d + "weights.txt";
-        System.out.println("Saving to " + filename);
-        try {
-            FileWriter writer = null;
-            if(id == 1) { //1st hidden layer, overwrite
-                writer = new FileWriter(filename, false); //overwrite
-            }
-            else {
-                writer = new FileWriter(filename, true); //append to data
-            }
-            for(int i = 0; i <weights.length; i++) {
-                for(int j = 0; j < weights[i].length; j++) {
-                    writer.write(String.valueOf(weights[i][j]) + "\n");
-                }
-            }
-            for(int i = 0; i < bias_weights.length; i++) {
-                writer.write(String.valueOf(bias_weights[i] + "\n"));
-            }
-            writer.close();
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void load(int n, int a, int b, double d) {
-        String filename = weights_filename() + "id:" + id + "_n:" + n + "_a:" +a + "_b:" + b + "_d:" + d + "weights.txt";
-        System.out.println("Loading from " + filename);
-        try {
-            Scanner scanner = new Scanner(new FileInputStream(filename));
-            for(int i = 0; i <weights.length; i++) {
-                for(int j = 0; j < weights[i].length; j++) {
-                        weights[i][j] = scanner.nextDouble();
-                }
-            }
-            for(int i = 0; i < bias_weights.length; i++) {
-                bias_weights[i] = scanner.nextDouble();
-            }
-            scanner.close();
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-            randomizeWeights();
-        }
-    }
-
-    private String weights_filename() {
-        switch(type) {
-            case HIDDEN_LAYER : {
-                return Util.DIGITS_HIDDEN_LAYER_WEIGHTS_DIR;
-            }
-            case OUTPUT_LAYER: {
-                return Util.DIGITS_OUTPUT_LAYER_WEIGHTS_DIR;
-            }
-        }
-        return null;
-    }
-
-
-
-
-
 }

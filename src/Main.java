@@ -15,7 +15,7 @@ public class Main {
         List<Integer> hidden = hidden();
         Driver bestDriver = new Driver(196, 2, 2, 1.0, hidden);
         // bestDriver.load();
-        // bestDriver.randomizeWeights();
+        // // bestDriver.randomizeWeights();
         // bestDriver.train();
         // bestDriver.validate();
         
@@ -25,10 +25,10 @@ public class Main {
             int b = a;
             List<Image> images = loadImages(n, a, b, Util.DIGIT_TRAINING_DATA);
             int[] labels = loadLabels(images, Util.DIGIT_TRAINING_LABELS);
-            for(int j = 1; j<=10; j++) {
+            for(int j = 10; j<=10; j++) {
                     Driver d = new Driver(n, a, b, (j/10.0), hidden);
-                    d.images = images;
                     d.labels = labels;
+                    d.images = Util.copy(images);
                     // d.randomizeWeights();
                     d.load();
                     d.train();
@@ -49,7 +49,7 @@ public class Main {
 
     private static List<Integer> hidden() {
         List<Integer> list = new ArrayList<>();
-        list.add(32);
+        list.add(64);
         return list;
     }
 

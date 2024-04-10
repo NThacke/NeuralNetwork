@@ -94,8 +94,8 @@ public class Driver implements Comparable<Driver> {
     }
 
     public void train() {
-        loadImages(Util.DIGIT_TRAINING_DATA);
-        loadLabels(Util.DIGIT_TRAINING_LABELS);
+        // loadImages(Util.DIGIT_TRAINING_DATA);
+        // loadLabels(Util.DIGIT_TRAINING_LABELS);
         trainingSet(threshold);
         long cnt = 0;
         while(cnt < TRAINING_CNT) {

@@ -2,6 +2,7 @@ package model.util;
 
 import java.util.*;
 import java.text.SimpleDateFormat;
+import model.*;
 
 
 public class Util {
@@ -72,5 +73,13 @@ public class Util {
             out[i] = (double)(arr[i]);
         }
         return out;
+    }
+
+    public static List<Image> copy(List<Image> list) {
+        List<Image> copy = new ArrayList<>();
+        for(Image i : list) {
+            copy.add(i);
+        }
+        return copy;
     }
 }

@@ -1,10 +1,12 @@
 package model;
 
-public abstract class AbstractImage {
+import model.util.Util;
+
+public abstract class AbstractImage implements Util {
 
     protected char[][] image;
 
-    protected int[] phi;
+    protected double[] phi;
 
     protected int id;
 
@@ -14,7 +16,11 @@ public abstract class AbstractImage {
 
     protected int b;
 
-    public int[] phi() {
+    protected int label;
+
+    protected int type;
+
+    public double[] phi() {
         return phi;
     }
 
@@ -24,8 +30,8 @@ public abstract class AbstractImage {
         }
     }
 
-    private int[] phi(int n, int a, int b) {
-        int[] arr = new int[n];
+    private double[] phi(int n, int a, int b) {
+        double[] arr = new double[n];
 
         //We need to split the image into *n* regions, each of dimension a*b
 
@@ -34,7 +40,12 @@ public abstract class AbstractImage {
         int cnt = 0;
         for (int i = 0; i <= image.length - a; i += a) {
             for (int j = 0; j <= image[i].length - b; j += b) {
-                arr[cnt] = count(i, j, a, b);
+                if(type == DIGITS) {
+                    arr[cnt] = Util.sigmoid(count(i, j, a, b));
+                }
+                else {
+                    arr[cnt] = count(i, j, a, b);
+                }
                 cnt++;
             }
         }
@@ -64,12 +75,23 @@ public abstract class AbstractImage {
      */
     abstract protected boolean validDimensions(int n, int a, int b);
 
-    private int count(int startRow, int startCol, int a, int b) {
-        int count = 0;
+    private double count(int startRow, int startCol, int a, int b) {
+        double count = 0;
         for (int i = startRow; i < startRow + a; i++) {
             for (int j = startCol; j < startCol + b; j++) {
-                if (image[i][j] == '#' || image[i][j] == '+') {
-                    count++;
+                if(type == DIGITS) {
+                    if (image[i][j] == '#') {
+                        count += 2;
+                    }
+                    else if(image[i][j] == '+') {
+                        count += 1;
+                    }
+                    else {
+                        count -= 1;
+                    }
+                }
+                else if(image[i][j] == '#') {
+                    count ++;
                 }
             }
         }
@@ -82,7 +104,12 @@ public abstract class AbstractImage {
     public int getID() {
         return id;
     }
-
+    public void setLabel(int label) {
+        this.label = label;
+    }
+    public int getLabel() {
+        return label;
+    }
     public String toString() {
         StringBuilder s = new StringBuilder();
         for(int i = 0; i < image.length; i++) {

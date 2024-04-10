@@ -2,14 +2,22 @@ package model.util;
 
 import java.util.*;
 import java.text.SimpleDateFormat;
+import model.*;
 
 
-public class Util {
+public abstract interface Util {
+
+    public static final int FACES = 19283;
+    public static final int DIGITS = 12920202;
+
+    public static final int FACE_IMAGE_LENGTH = 70;
+    public static final int FACE_IMAGE_WIDTH = 60;
 
     public static final int DIGIT_IMAGE_LENGTH = 28;
-
     public static final int DIGIT_IMAGE_WIDTH = 28;
 
+    public static final String DIGITS_HIDDEN_LAYER_WEIGHTS_DIR = "src/data/weights/digits/hidden/";
+    public static final String DIGITS_OUTPUT_LAYER_WEIGHTS_DIR = "src/data/weights/digits/output/";
 
     public static final String DIGIT_0_DIRECTORY = "src/data/weights/digits/0/";
     public static final String DIGIT_1_DIRECTORY = "src/data/weights/digits/1/";
@@ -49,7 +57,7 @@ public class Util {
 
 
     public static final long seed = 1;
-    public static final Random random = new Random(seed);
+    public static final Random random = new Random();
 
 
     public static double sigmoid(double x) {
@@ -62,5 +70,21 @@ public class Util {
         sdf.setTimeZone(TimeZone.getTimeZone("GMT")); // Setting timezone to GMT to ensure accurate calculation
         String formattedTime = sdf.format(new Date(milliseconds));
         return formattedTime;
+    }
+
+    public static double[] toDoubleArray(int[] arr) {
+        double[] out = new double[arr.length];
+        for(int i = 0; i< arr.length; i++) {
+            out[i] = (double)(arr[i]);
+        }
+        return out;
+    }
+
+    public static List<Image> copy(List<Image> list) {
+        List<Image> copy = new ArrayList<>();
+        for(Image i : list) {
+            copy.add(i);
+        }
+        return copy;
     }
 }

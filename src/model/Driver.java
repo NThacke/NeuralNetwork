@@ -20,7 +20,7 @@ public class Driver implements Comparable<Driver>, Util {
 
     public double acc;
 
-    private static final int TRAINING_CNT = 1000;
+    private static final int TRAINING_CNT = 100;
 
     private double threshold;
 
@@ -127,31 +127,6 @@ public class Driver implements Comparable<Driver>, Util {
         }
         nn.back_propagate(image, output);
     }
-    private double[] expected(Image image, double[] output_vector) {
-        double[] arr =  new double[output_vector.length];
-        int ans = image.getLabel();
-        for(int i = 0; i < arr.length; i++) {
-            if(i == ans) {
-                arr[i] = 1.0;
-            }
-            else {
-                arr[i] = 0.0;
-            }
-        }
-        return arr;
-    }
-
-    private double[] loss(double[] expected, double[] output) {
-        if(expected.length == output.length) {
-            double[] arr = new double[expected.length];
-            for(int i = 0; i < output.length; i++) {
-                double diff = output[i] - expected[i];
-                arr[i] = diff * diff;
-            }
-            return arr;
-        }
-        throw new IllegalArgumentException("Expected and output do not have the same length Expected : " + expected.length + " Output : " + output.length);
-    }
 
     public void validate() {
         switch (type) {
@@ -200,7 +175,7 @@ public class Driver implements Comparable<Driver>, Util {
         long start = System.currentTimeMillis();
         long cnt = 0;
         while(cnt < TRAINING_CNT) {
-            if(cnt % 100 == 0) {
+            if(cnt % (TRAINING_CNT/10) == 0) {
                 System.out.println(cnt);
             }
 
@@ -347,6 +322,6 @@ public class Driver implements Comparable<Driver>, Util {
     }
 
     public int compareTo(Driver other) {
-        return (int)(100*(this.acc - other.acc));
+        return (int)(100000*(this.acc - other.acc));
     }
 }

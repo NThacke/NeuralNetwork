@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 public class Layer implements Serializable {
 
-    public static final double alpha = 0.0001;
+    public static final double alpha = 0.01;
 
     public static final int INPUT_LAYER = 129;
     public static final int HIDDEN_LAYER = 130;
@@ -28,11 +28,8 @@ public class Layer implements Serializable {
 
     int id;
 
-    private int size;
-
     public Layer(int type, int size) {
         this.type = type;
-        this.size = size;
         switch (type) {
             case INPUT_LAYER : {
                 output_vector = new double[size];
@@ -55,7 +52,6 @@ public class Layer implements Serializable {
 
     public void randomizeWeights() {
         System.out.println(id);
-        double r = Math.sqrt(6.0/ (double)(input.output_vector.length));
         for(int i = 0; i < weights.length; i++) {
             for(int j = 0; j < weights[i].length; j++) {
                 weights[i][j] = Util.random.nextGaussian();

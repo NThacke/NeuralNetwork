@@ -1,0 +1,16 @@
+-------------------------
+Training Output File
+-------------------------
+
+Digits
+
+N:49
+A:4
+B:4
+Training Threshold : 1.0
+
+Trained 100 epochs
+Training Time : 12180 ms
+Training Time : 00:00:12 HH:MM:SS
+
+Validation Accuracy : 76.80%

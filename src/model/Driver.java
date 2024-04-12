@@ -30,6 +30,8 @@ public class Driver implements Comparable<Driver>, Util {
 
     public static final String NN_FACES_DIR = "src/data/neural_nets/faces/";
 
+    private long time;
+
     public Driver(int n, int a, int b, double threshold, List<Integer> hidden, int type) {
         this.type = type;
         NeuralNetwork.INPUT_DIGITS_SIZE = n;
@@ -63,13 +65,13 @@ public class Driver implements Comparable<Driver>, Util {
                 break;
             }
         }
-        NeuralNetwork nn = loadNN(dir + "n:" + n + "_a:" + a + "_b:" + b + "_d:" + threshold);
-        if(nn != null) {
-            this.nn = nn;
-        }
-        else {
+        // NeuralNetwork nn = loadNN(dir + "n:" + n + "_a:" + a + "_b:" + b + "_d:" + threshold);
+        // if(nn != null) {
+        //     this.nn = nn;
+        // }
+        // else {
             this.nn = new NeuralNetwork(NeuralNetwork.INPUT_DIGITS_SIZE, hidden, NeuralNetwork.OUTPUT_DIGITS_SIZE);
-        }
+        // }
     }
 
      // Method to save a Person object to a file
@@ -168,14 +170,14 @@ public class Driver implements Comparable<Driver>, Util {
         for(int i = 0; i < images.size(); i++) {
             Image image = images.get(i);
             int answer = nn.fire(image);
-            System.out.println(image);
-            System.out.println(answer);
+            // System.out.println(image);
+            // System.out.println(answer);
             if(answer == labels[image.getID()]) {
                 correct++;
             }
 
         }
-        System.out.println(images.size());
+        // System.out.println(images.size());
         double accuracy = (double)(correct)/(double)(images.size());
         this.acc = accuracy;
         System.out.println("Correct " + correct + " out of " + images.size() + " for an accuracy of " + accuracy);
@@ -195,9 +197,10 @@ public class Driver implements Comparable<Driver>, Util {
         //     }
         // }
         trainingSet(threshold);
+        long start = System.currentTimeMillis();
         long cnt = 0;
         while(cnt < TRAINING_CNT) {
-            if(cnt % 10 == 0) {
+            if(cnt % 100 == 0) {
                 System.out.println(cnt);
             }
 
@@ -207,6 +210,7 @@ public class Driver implements Comparable<Driver>, Util {
             }
             cnt++;
         }
+        time = System.currentTimeMillis() - start;
         saveNN(this.nn);
     }
     public void test() {
@@ -241,6 +245,48 @@ public class Driver implements Comparable<Driver>, Util {
 
     public void randomizeWeights() {
         nn.randomizeWeights();
+    }
+
+    public void outputTraining() {
+        FileWriter writer = null;
+        try {
+            switch(type) {
+                case FACES : {
+                    writer = new FileWriter(FACE_TRAINING_OUTPUT_DIR + "n:" + n + "_a:" + a + "_b:" + b + "_d:" + threshold);
+                    break;
+                }
+                case DIGITS : {
+                    writer = new FileWriter(DIGIT_TRAINING_OUTPUT_DIR + "n:" + n + "_a:" + a + "_b:" + b + "_d:" + threshold);
+                    break;
+                }
+            
+            }
+            writer.write("-------------------------\n");
+            writer.write("Training Output File\n");
+            writer.write("-------------------------\n");
+            writer.write("\n");
+            switch(type) {
+                case FACES : {
+                    writer.write("Faces\n\n");
+                    break;
+                }
+                case DIGITS : {
+                    writer.write("Digits\n\n");
+                    break;
+                }
+            }
+            writer.write("N:" + n + "\nA:" + a + "\nB:" + b + "\nTraining Threshold : " + threshold);
+            writer.write("\n\n");
+            writer.write("Trained " + TRAINING_CNT + " epochs\n");
+            writer.write("Training Time : " + time + " ms\n");
+            writer.write("Training Time : " + Util.millisecondsToHMS(time) + " HH:MM:SS\n");
+            String formattedAcc = String.format("%.2f", acc * 100);
+            writer.write("\nValidation Accuracy : " + formattedAcc + "%");
+            writer.close();
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void trainingSet(double d) {

@@ -62,7 +62,7 @@ public class Main {
             int b = a;
             List<Image> images = loadImages(n, a, b, Util.FACE_TRAINING_DATA, Image.FACES);
             int[] labels = loadLabels(images, Util.FACE_TRAINING_LABELS);
-            for(int j = 10; j<=10; j++) {
+            for(int j = 1; j<=10; j++) {
                     Driver d = new Driver(n, a, b, (j/10.0), hidden, Util.FACES);
                     d.labels = labels;
                     d.images = Util.copy(images);

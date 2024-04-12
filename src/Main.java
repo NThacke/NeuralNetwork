@@ -56,7 +56,7 @@ public class Main {
         List<Integer> hidden = hidden(451);
         Driver bestDriver = null;
         
-        for(int i = 0; i<face_dim.length; i++) {
+        for(int i = 0; i<face_dim.length-1; i++) {
             int n = face_dim[i][0];
             int a = face_dim[i][1];
             int b = a;
@@ -66,10 +66,10 @@ public class Main {
                     Driver d = new Driver(n, a, b, (j/10.0), hidden, Util.FACES);
                     d.labels = labels;
                     d.images = Util.copy(images);
-                    d.randomizeWeights();
+                    // d.randomizeWeights();
                     d.train();
                     d.validate();
-                    d.outputTraining();
+                    // d.outputTraining();
                     // d.test();
                     if(d.acc > best) {
                         best = d.acc;

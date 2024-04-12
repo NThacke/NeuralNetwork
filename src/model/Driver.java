@@ -65,13 +65,13 @@ public class Driver implements Comparable<Driver>, Util {
                 break;
             }
         }
-        // NeuralNetwork nn = loadNN(dir + "n:" + n + "_a:" + a + "_b:" + b + "_d:" + threshold);
-        // if(nn != null) {
-        //     this.nn = nn;
-        // }
-        // else {
+        NeuralNetwork nn = loadNN(dir + "n:" + n + "_a:" + a + "_b:" + b + "_d:" + threshold);
+        if(nn != null) {
+            this.nn = nn;
+        }
+        else {
             this.nn = new NeuralNetwork(NeuralNetwork.INPUT_DIGITS_SIZE, hidden, NeuralNetwork.OUTPUT_DIGITS_SIZE);
-        // }
+        }
     }
 
      // Method to save a Person object to a file

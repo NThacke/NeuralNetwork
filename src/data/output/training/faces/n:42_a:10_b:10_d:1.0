@@ -1,0 +1,16 @@
+-------------------------
+Training Output File
+-------------------------
+
+Faces
+
+N:42
+A:10
+B:10
+Training Threshold : 1.0
+
+Trained 1000 epochs
+Training Time : 5490 ms
+Training Time : 00:00:05 HH:MM:SS
+
+Validation Accuracy : 76.08%

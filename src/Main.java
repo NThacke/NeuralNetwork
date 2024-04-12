@@ -9,10 +9,11 @@ public class Main {
 
     private static final int[][] digit_dim = {{49, 4, 4,}, {196, 2, 2,}, {784, 1, 1}};
 
-    private static final int[][] face_dim = {{42, 10, 10}, {168, 5, 5}};
+    private static final int[][] face_dim = {{42, 10, 10}, {168, 5, 5}, {1050, 2, 2}};
     public static void main(String[] args) {
 
-        digitTraining();
+        // digitTraining();
+        faceTraining();
     }
 
     private static void digitTraining() {
@@ -65,9 +66,10 @@ public class Main {
                     Driver d = new Driver(n, a, b, (j/10.0), hidden, Util.FACES);
                     d.labels = labels;
                     d.images = Util.copy(images);
-                    d.randomizeWeights();
+                    // d.randomizeWeights();
                     d.train();
                     d.validate();
+                    // d.outputTraining();
                     // d.test();
                     if(d.acc > best) {
                         best = d.acc;
@@ -84,7 +86,8 @@ public class Main {
     }
 
     private static List<Integer> hidden(int sample_size) {
-        double h = sample_size / (2 * (NeuralNetwork.INPUT_DIGITS_SIZE + NeuralNetwork.OUTPUT_DIGITS_SIZE)); //recommend hidden neuron size
+        // double h = sample_size / (2 * (NeuralNetwork.INPUT_DIGITS_SIZE + NeuralNetwork.OUTPUT_DIGITS_SIZE)); //recommend hidden neuron size
+        double h = NeuralNetwork.INPUT_DIGITS_SIZE / 2;
 
         List<Integer> list = new ArrayList<>();
         list.add((int)(h));

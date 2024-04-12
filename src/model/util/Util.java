@@ -54,6 +54,9 @@ public abstract interface Util {
 
     public static final String FACE_WEIGHTS_DIRECTORY = "src/data/weights/faces/";
 
+    public static final String FACE_TRAINING_OUTPUT_DIR = "src/data/output/training/faces/";
+    public static final String DIGIT_TRAINING_OUTPUT_DIR = "src/data/output/training/digits/";
+
 
 
     public static final long seed = 1;
@@ -63,6 +66,15 @@ public abstract interface Util {
     public static double sigmoid(double x) {
         double e = Math.exp(-x);
         return 1/(1+e);
+    }
+
+    public static String millisecondsToHMS(long milliseconds) {
+        long seconds = milliseconds / 1000;
+        long hours = seconds / 3600;
+        long minutes = (seconds % 3600) / 60;
+        seconds = seconds % 60;
+
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 
     public static String hhmmss(long milliseconds) {

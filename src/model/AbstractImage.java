@@ -40,12 +40,7 @@ public abstract class AbstractImage implements Util {
         int cnt = 0;
         for (int i = 0; i <= image.length - a; i += a) {
             for (int j = 0; j <= image[i].length - b; j += b) {
-                if(type == DIGITS) {
-                    arr[cnt] = Util.sigmoid(count(i, j, a, b));
-                }
-                else {
-                    arr[cnt] = count(i, j, a, b);
-                }
+                arr[cnt] = Util.sigmoid(count(i, j, a, b));
                 cnt++;
             }
         }
@@ -90,8 +85,10 @@ public abstract class AbstractImage implements Util {
                         count -= 1;
                     }
                 }
-                else if(image[i][j] == '#') {
-                    count ++;
+                else { //faces features
+                    if(image[i][j] == '#') {
+                        count ++ ;
+                    }
                 }
             }
         }

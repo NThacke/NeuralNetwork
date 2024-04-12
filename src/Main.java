@@ -56,7 +56,7 @@ public class Main {
         List<Integer> hidden = hidden(451);
         Driver bestDriver = null;
         
-        for(int i = 0; i<face_dim.length-1; i++) {
+        for(int i = 0; i<face_dim.length; i++) {
             int n = face_dim[i][0];
             int a = face_dim[i][1];
             int b = a;

@@ -12,8 +12,8 @@ public class Main {
     private static final int[][] face_dim = {{42, 10, 10}, {168, 5, 5}, {1050, 2, 2}};
     public static void main(String[] args) {
 
-        digitTraining();
-        // faceTraining();
+        // digitTraining();
+        faceTraining();
     }
 
     private static void digitTraining() {
@@ -67,10 +67,10 @@ public class Main {
                     Driver d = new Driver(n, a, b, (j/10.0), hidden, Util.FACES);
                     d.labels = labels;
                     d.images = Util.copy(images);
-                    // d.randomizeWeights();
+                    d.randomizeWeights();
                     d.train();
                     d.validate();
-                    // d.outputTraining();
+                    d.outputTraining();
                     // d.test();
                     if(d.acc > best) {
                         best = d.acc;

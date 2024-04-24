@@ -12,8 +12,8 @@ public class Main {
     private static final int[][] face_dim = {{42, 10, 10}, {168, 5, 5}, {1050, 2, 2}};
     public static void main(String[] args) {
 
-        digitTraining();
-        // faceTraining();
+        // digitTraining();
+        faceTraining();
     }
 
     private static void digitTraining() {
@@ -26,17 +26,17 @@ public class Main {
             int n = digit_dim[i][0];
             int a = digit_dim[i][1];
             int b = a;
-            // List<Image> images = loadImages(n, a, b, Util.DIGIT_TRAINING_DATA, Image.DIGITS);
-            // int[] labels = loadLabels(images, Util.DIGIT_TRAINING_LABELS);
+            List<Image> images = loadImages(n, a, b, Util.DIGIT_TRAINING_DATA, Image.DIGITS);
+            int[] labels = loadLabels(images, Util.DIGIT_TRAINING_LABELS);
             for(int j = 1; j<=10; j++) {
                     Driver d = new Driver(n, a, b, (j/10.0), hidden, Util.DIGITS);
-                    // d.labels = labels;
-                    // d.images = Util.copy(images);
-                    // d.randomizeWeights();
-                    // d.train();
-                    // d.validate();
-                    // d.outputTraining();
-                    d.test();
+                    d.labels = labels;
+                    d.images = Util.copy(images);
+                    d.randomizeWeights();
+                    d.train();
+                    d.validate();
+                    d.outputTraining();
+                    // d.test();
                     if(d.acc > best) {
                         best = d.acc;
                         bestDriver = d;
@@ -67,10 +67,10 @@ public class Main {
                     Driver d = new Driver(n, a, b, (j/10.0), hidden, Util.FACES);
                     d.labels = labels;
                     d.images = Util.copy(images);
-                    // d.randomizeWeights();
+                    d.randomizeWeights();
                     d.train();
                     d.validate();
-                    // d.outputTraining();
+                    d.outputTraining();
                     // d.test();
                     if(d.acc > best) {
                         best = d.acc;

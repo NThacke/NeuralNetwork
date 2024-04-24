@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 public class Layer implements Serializable {
 
-    public static final double alpha = 0.001;
+    public static final double alpha = 0.01;
 
     public static final int INPUT_LAYER = 129;
     public static final int HIDDEN_LAYER = 130;

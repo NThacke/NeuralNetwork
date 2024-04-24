@@ -9,8 +9,8 @@ A:2
 B:2
 Training Threshold : 1.0
 
-Trained 100 epochs
-Training Time : 33838 ms
-Training Time : 00:00:33 HH:MM:SS
+Trained 1000 epochs
+Training Time : 231942 ms
+Training Time : 00:03:51 HH:MM:SS
 
-Validation Accuracy : 78.60%
+Validation Accuracy : 71.20%

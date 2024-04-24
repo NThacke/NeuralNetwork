@@ -20,7 +20,7 @@ public class Driver implements Comparable<Driver>, Util {
 
     public double acc;
 
-    private static final int TRAINING_CNT = 100;
+    private static final int TRAINING_CNT = 1000;
 
     private double threshold;
 

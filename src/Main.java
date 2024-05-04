@@ -12,18 +12,16 @@ public class Main {
 
     private static final int[][] face_dim = {{42, 10, 10}, {168, 5, 5}, {1050, 2, 2}};
     public static void main(String[] args) {
-
-        // digitTest();
-        // digitDemo();
-        digitTraining();
-        // faceTraining();
-
-        // d.outputTraining();
+        // faceDemo();
+        digitDemo();
     }
 
+    private static void faceDemo() {
+        Driver d = new Driver(168, 5, 5, 1.0, hidden(5000), Util.FACES);
+        d.validate();
+    }
     private static void digitDemo() {
-        Driver d = new Driver(196, 2, 2, 0.8, hidden(5000), Util.DIGITS);
-        // d.test();
+        Driver d = new Driver(196, 2, 2, 0.9, hidden(5000), Util.DIGITS);
         d.validate();
     }
 

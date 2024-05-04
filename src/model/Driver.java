@@ -160,6 +160,44 @@ public class Driver implements Comparable<Driver>, Util {
         System.out.println("Correct " + correct + " out of " + images.size() + " for an accuracy of " + accuracy);
     }
 
+    public double[][] stats(double x) {
+        int sample_size = 5;
+        double[] prediction_errors = new double[sample_size];
+
+        for(int i = 0; i < sample_size; i++) {
+            switch (type) {
+                case DIGITS : {
+                    loadImages(Util.DIGIT_VALIDATION_DATA);
+                    loadLabels(Util.DIGIT_VALIDATION_LABELS);
+                    break;
+                }
+                default : {
+                    loadImages(Util.FACE_VALIDATION_DATA);
+                    loadLabels(Util.FACE_VALIDATION_LABELS);
+                    break;
+                }
+            }
+            trainingSet(x); 
+            double incorrect = 0;
+            for(Image image : trainingset) {
+                int answer = nn.fire(image);
+                if(answer != labels[image.getID()]) {
+                    incorrect++;
+                }
+            }
+            prediction_errors[i] = (incorrect) / ((double)(trainingset.size()));
+        }
+
+        double mean = Util.mean(prediction_errors);
+        double std_dev = Util.stddv(prediction_errors);
+
+        double[][] vals = new double[2][sample_size];
+        vals[1] = prediction_errors;
+        vals[0][0] = mean;
+        vals[0][1] = std_dev;
+        return vals;
+    }
+
     public void train() {
         // switch (type) {
         //     case DIGITS : {

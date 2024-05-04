@@ -20,6 +20,8 @@ public class Driver implements Comparable<Driver>, Util {
 
     public double acc;
 
+    public double test_acc;
+
     private static final int TRAINING_CNT = 1000;
 
     private double threshold;
@@ -145,8 +147,8 @@ public class Driver implements Comparable<Driver>, Util {
         for(int i = 0; i < images.size(); i++) {
             Image image = images.get(i);
             int answer = nn.fire(image);
-            // System.out.println(image);
-            // System.out.println(answer);
+            System.out.println(image);
+            System.out.println(answer);
             if(answer == labels[image.getID()]) {
                 correct++;
             }
@@ -214,7 +216,7 @@ public class Driver implements Comparable<Driver>, Util {
         }
         System.out.println(images.size());
         double accuracy = (double)(correct)/(double)(images.size());
-        this.acc = accuracy;
+        this.test_acc = accuracy;
         System.out.println("Correct " + correct + " out of " + images.size() + " for an accuracy of " + accuracy);
     }
 
@@ -256,7 +258,9 @@ public class Driver implements Comparable<Driver>, Util {
             writer.write("Training Time : " + time + " ms\n");
             writer.write("Training Time : " + Util.millisecondsToHMS(time) + " HH:MM:SS\n");
             String formattedAcc = String.format("%.2f", acc * 100);
+            String formatted_test_acc = String.format("%.2f", test_acc * 100);
             writer.write("\nValidation Accuracy : " + formattedAcc + "%");
+            writer.write("\nTesting Accuracy : " + formatted_test_acc + "%");
             writer.close();
         }
         catch(Exception e) {

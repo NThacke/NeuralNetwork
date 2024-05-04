@@ -10,7 +10,8 @@ B:4
 Training Threshold : 1.0
 
 Trained 1000 epochs
-Training Time : 78295 ms
+Training Time : 78408 ms
 Training Time : 00:01:18 HH:MM:SS
 
-Validation Accuracy : 71.70%
+Validation Accuracy : 78.90%
+Testing Accuracy : 76.00%
